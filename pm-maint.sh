@@ -41,12 +41,12 @@ binaries_release_info() {
     binReleaseInfos=$(curl -s $BINARIES_RELEASE_INFO_API)
 
     # Query for release binaries archive download URL and file name
-    binDownloadUrl=$(echo $binReleaseInfos | jq -r ".[] | select(.tag_name == \"${BINARIES_TAG}\") | .assets[] | select(.name | test(\".*${BINARIES_TARGET_ARCH}-PM5.tar.gz\")) | .browser_download_url")
-    binFileName=$(echo $binReleaseInfos | jq -r ".[] | select(.tag_name == \"${BINARIES_TAG}\") | .assets[] | select(.name | test(\".*${BINARIES_TARGET_ARCH}-PM5.tar.gz\")) | .name")
+    binDownloadUrl=$(echo "$binReleaseInfos" | jq -r ".[] | select(.tag_name == \"${BINARIES_TAG}\") | .assets[] | select(.name | test(\".*${BINARIES_TARGET_ARCH}-PM5.tar.gz\")) | .browser_download_url")
+    binFileName=$(echo "$binReleaseInfos" | jq -r ".[] | select(.tag_name == \"${BINARIES_TAG}\") | .assets[] | select(.name | test(\".*${BINARIES_TARGET_ARCH}-PM5.tar.gz\")) | .name")
 
     # Query for binary symbols archive download URL and file name
-    binSymbolsDownloadUrl=$(echo $binReleaseInfos | jq -r ".[] | select(.tag_name == \"${BINARIES_TAG}\") | .assets[] | select(.name | test(\".*${BINARIES_TARGET_ARCH}-PM5-debugging-symbols.tar.gz\")) | .browser_download_url")
-    binSymbolsFileName=$(echo $binReleaseInfos | jq -r ".[] | select(.tag_name == \"${BINARIES_TAG}\") | .assets[] | select(.name | test(\".*${BINARIES_TARGET_ARCH}-PM5-debugging-symbols.tar.gz\")) | .name")
+    binSymbolsDownloadUrl=$(echo "$binReleaseInfos" | jq -r ".[] | select(.tag_name == \"${BINARIES_TAG}\") | .assets[] | select(.name | test(\".*${BINARIES_TARGET_ARCH}-PM5-debugging-symbols.tar.gz\")) | .browser_download_url")
+    binSymbolsFileName=$(echo "$binReleaseInfos" | jq -r ".[] | select(.tag_name == \"${BINARIES_TAG}\") | .assets[] | select(.name | test(\".*${BINARIES_TARGET_ARCH}-PM5-debugging-symbols.tar.gz\")) | .name")
 
     echo "Binaries archive download url: ${binDownloadUrl} | symbols archive download url: ${binSymbolsDownloadUrl}"
 }
@@ -57,10 +57,10 @@ pmmp_release_info() {
     pmReleaseInfos=$(curl -s $PMMP_RELEASE_INFO_API)
 
     # Query for release server file download URL
-    pmDownloadUrl=$(echo $pmReleaseInfos | jq -r '.assets[] | select(.name == "PocketMine-MP.phar") | .browser_download_url')
+    pmDownloadUrl=$(echo "$pmReleaseInfos" | jq -r '.assets[] | select(.name == "PocketMine-MP.phar") | .browser_download_url')
 
     # Query for release commit hash
-    commitHash=$(echo $pmReleaseInfos | jq -r '.target_commitish')
+    commitHash=$(echo "$pmReleaseInfos" | jq -r '.target_commitish')
 
     echo "PMMP release download url: ${pmDownloadUrl} | commit hash: ${commitHash}"
 }
@@ -71,7 +71,7 @@ devtools_release_info() {
     devReleaseInfos=$(curl -s $DEVTOOLS_RELEASE_INFO_API)
 
     # Query for release plugin file download URL
-    devDownloadUrl=$(echo $devReleaseInfos | jq -r '.assets[] | select(.name == "DevTools.phar") | .browser_download_url')
+    devDownloadUrl=$(echo "$devReleaseInfos" | jq -r '.assets[] | select(.name == "DevTools.phar") | .browser_download_url')
 
     echo "DevTools release download url: ${devDownloadUrl}"
 }
@@ -82,12 +82,12 @@ binaries() {
     rm -r bin bin-debug
 
     # Download binary dist and symbols
-    curl -L -O $binDownloadUrl
-    curl -L -O $binSymbolsDownloadUrl
+    curl -L -O "$binDownloadUrl"
+    curl -L -O "$binSymbolsDownloadUrl"
 
     # Extract binary archive files
-    tar -xzvf $binFileName
-    tar -xzvf $binSymbolsFileName
+    tar -xzvf "$binFileName"
+    tar -xzvf "$binSymbolsFileName"
 
     # Apply fix for PHP extensions path
     # source: https://doc.pmmp.io/en/rtfd/faq/installation/opcache.so.html
@@ -95,13 +95,13 @@ binaries() {
     grep -q '^extension_dir' bin/php7/bin/php.ini && sed -i'bak' "s{^extension_dir=.*{extension_dir=\"$EXTENSION_DIR\"{" bin/php7/bin/php.ini || echo "extension_dir=\"$EXTENSION_DIR\"" >> bin/php7/bin/php.ini
 
     # Remove downloaded archive files
-    rm $binFileName $binSymbolsFileName
+    rm "$binFileName" "$binSymbolsFileName"
 }
 
 # Download PocketMine-MP server files
 server() {
     # Download PHAR
-    curl -L -O $pmDownloadUrl
+    curl -L -O "$pmDownloadUrl"
 
     # Download Composer
     curl -o $COMPOSER_FILE $COMPOSER_DL_URL
@@ -119,18 +119,18 @@ pmenv() {
     git clone --recursive $PMMP_GIT_REPO
 
     # Checkout given commit
-    cd $PMMP_REPO_NAME
+    cd $PMMP_REPO_NAME || exit
     git checkout $commitHash
     cd ..
 
     # Loop env files and replace them
-    for file in ${ENV_FILES[@]}
+    for file in "${ENV_FILES[@]}"
     do
         # Remove old file
-        rm $file
+        rm "$file"
 
         # Copy new file from repo
-        cp $PMMP_REPO_NAME/$file .
+        cp $PMMP_REPO_NAME/"$file" .
     done
 
     # Delete Git repo
@@ -143,8 +143,8 @@ sources() {
     git clone --recursive $PMMP_GIT_REPO
 
     # Checkout given commit
-    cd $PMMP_REPO_NAME
-    git checkout $commitHash
+    cd $PMMP_REPO_NAME || exit
+    git checkout "$commitHash"
     cd ..
 
     # Delete old sources
@@ -160,7 +160,7 @@ sources() {
 # Download DevTools plugin
 devtools() {
     # Download PHAR
-    curl -L -o $DEVTOOLS_FILE $devDownloadUrl
+    curl -L -o $DEVTOOLS_FILE "$devDownloadUrl"
 
     # Delete old PHAR file
     rm plugins/$DEVTOOLS_FILE
