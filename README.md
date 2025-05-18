@@ -9,9 +9,9 @@
 
 ## 📙 Description
 
-pmmp-dev-maintenance is an opiniated script for my recurring routines in keeping my [PocketMine-MP](https://github.com/pmmp/PocketMine-MP) installation
+pmmp-dev-maintenance is an opinionated script for my recurring routines in keeping my [PocketMine-MP](https://github.com/pmmp/PocketMine-MP) installation
 for local development up-to-date. It provides several automations to download the latest PHP binaries, PocketMine-MP
-release file, sources of the latest release and the [DevTools plugin](https://github.com/pmmp/DevTools).
+release file, the sources of the latest release and the [DevTools plugin](https://github.com/pmmp/DevTools).
 
 ## 🖥 Usage
 
@@ -27,13 +27,13 @@ Available actions to select from:
 | --- | --- |
 | binaries | Download the latest PHP binary files and symbols |
 | server | Download the latest PocketMine-MP release server PHAR and install dependencies |
-| pmenv | Replace common files such as the start script, composer lock file, etc., with latest version |
+| pmenv | Replace common files such as the start script, composer lock file, etc., with the latest version |
 | sources | Download the sources for the latest PocketMine-MP release |
 | devtools | Download the latest release of the DevTools plugin |
 
 ## ⌨️ Development
 
-The script is created as a simple Bash script. It uses curl for download the files and calling the GitHub API.
+The script is created as a simple Bash script. It uses curl for download the files and to call the GitHub API.
 Results from the API are parsed using jq.
 
 ## 🙋‍ Contribution
