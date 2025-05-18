@@ -71,7 +71,7 @@ devtools_release_info() {
     echo "DevTools release download url: ${devDownloadUrl}"
 }
 
-# Download binaries
+# Download PHP binaries
 binaries() {
     # Remove existing binaries and symbols
     rm -r bin bin-debug
@@ -83,6 +83,11 @@ binaries() {
     # Extract binary archive files
     tar -xzvf $binFileName
     tar -xzvf $binSymbolsFileName
+
+    # Apply fix for PHP extensions path
+    # source: https://doc.pmmp.io/en/rtfd/faq/installation/opcache.so.html
+    EXTENSION_DIR=$(find "$(pwd)/bin" -name "*debug-zts*")
+    grep -q '^extension_dir' bin/php7/bin/php.ini && sed -i'bak' "s{^extension_dir=.*{extension_dir=\"$EXTENSION_DIR\"{" bin/php7/bin/php.ini || echo "extension_dir=\"$EXTENSION_DIR\"" >> bin/php7/bin/php.ini
 
     # Remove downloaded archive files
     rm $binFileName $binSymbolsFileName
