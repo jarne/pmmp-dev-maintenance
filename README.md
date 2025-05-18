@@ -14,6 +14,8 @@ for local development up-to-date. It provides several automations to download th
 release file, the sources of the latest release and the [DevTools plugin](https://github.com/pmmp/DevTools).
 
 The script is developed and tested on Linux (Ubuntu), but it was previously used successfully on macOS, too.
+It partly depends on some dirty code and parsing values that could change in the future, so I personally would not
+recommend using this anywhere but in a development environment, and remember to always keep backups of your files.
 
 ## 🖥 Usage
 
