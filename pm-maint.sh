@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # PocketMine-MP dev environment tools script
 # provides features to build binaries, fetch latest PocketMine release from API and download it,
 # including server run environment and more utilities
