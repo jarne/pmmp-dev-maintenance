@@ -9,6 +9,11 @@
 
 # Settings
 
+BINARIES_TARGET_ARCH=Linux-x86_64
+BINARIES_TAG=pm5-latest
+
+# Variable definitions
+
 PMMP_REPO_ORG=pmmp
 PMMP_REPO_NAME=PocketMine-MP
 PMMP_GIT_REPO=https://github.com/$PMMP_REPO_ORG/$PMMP_REPO_NAME.git
@@ -19,8 +24,6 @@ DEVTOOLS_RELEASE_INFO_API=https://api.github.com/repos/$PMMP_REPO_ORG/$DEVTOOLS_
 
 BINARIES_REPO_NAME=PHP-Binaries
 BINARIES_RELEASE_INFO_API=https://api.github.com/repos/$PMMP_REPO_ORG/$BINARIES_REPO_NAME/releases
-BINARIES_TARGET_ARCH=Linux-x86_64
-BINARIES_TAG=pm5-latest
 
 PHP_BINARIES=bin/php7/bin/php
 ENV_FILES=(composer.json composer.lock start.sh)
